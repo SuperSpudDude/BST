@@ -28,13 +28,32 @@ void BST::insert(Key k, Item i){
 }
 
 void BST::insertRec(Key k, Item i, Node* & currentNode){
-    // test current node
+    // // this version tests the current node
+    // if(isLeaf(currentNode)){
+    //     currentNode = new Node(k, i);
+    // } else if(currentNode->key > k){
+    //     insertRec(k, i, currentNode->leftNode);
+    // } else if(currentNode->key < k){
+    //     insertRec(k, i, currentNode->rightNode);
+    // }
+
+    // this version tests the child nodes
     if(isLeaf(currentNode)){
         currentNode = new Node(k, i);
-    } else if(currentNode->key > k){
-        insertRec(k, i, currentNode->leftNode);
-    } else if(currentNode->key < k){
-        insertRec(k, i, currentNode->rightNode);
+    } else{
+        if(currentNode->key > k && isLeaf(currentNode->leftNode)){
+            // given key is less than current node key AND left child empty
+            currentNode->leftNode = new Node(k, i);
+        }else if(currentNode->key > k && !isLeaf(currentNode->leftNode)){
+            // given key is less than current node key AND left child is a node
+            insertRec(k, i, currentNode->leftNode);
+        } else if(currentNode->key < k && isLeaf(currentNode->rightNode)){
+            // given key is less than current node key AND right child empty
+            currentNode->rightNode = new Node(k, i);
+        }else if(currentNode->key < k && !isLeaf(currentNode->rightNode)){
+            // given key is less than current node key AND right child is a node
+            insertRec(k, i, currentNode->rightNode);
+        }
     }
 }
 
